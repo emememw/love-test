@@ -1,22 +1,33 @@
 local Entity = {};
 
-function Entity.create()
+function Entity.create(x, y, texture)
   local instance = {};
 
-  instance.x = 400;
+  instance.x = x
+  instance.y = y
+  instance.texture = texture
 
-  instance.y = 200;
-
-  function instance.test(delta)
-    instance.x = instance.x + 100 * delta;
+  function instance.onUpdate(delta)
   end
 
-  function instance.update(delta, callbackFunction)
-    instance.test(delta);
-    if instance.x > 800 then
-      instance.x = 0;
-      callbackFunction()
+  function instance.move(direction, speed, delta)
+    if direction == "right" then
+      instance.x = instance.x + speed * delta
+    elseif direction == "left" then
+      instance.x = instance.x - speed * delta
+    elseif direction == "down" then
+      instance.y = instance.y + speed * delta
+    else
+      instance.y = instance.y - speed * delta
     end
+  end
+
+  function instance.update(delta)
+    instance.onUpdate(delta);
+  end
+
+  function instance.render()
+    instance.texture.draw(instance.x, instance.y);
   end
 
   return instance;
