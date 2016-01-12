@@ -1,10 +1,12 @@
 local Entity = {};
 
+
 function Entity.create(x, y, texture)
   local instance = {};
 
   instance.x = x
   instance.y = y
+
   instance.texture = texture
 
   function instance.onUpdate(delta)
