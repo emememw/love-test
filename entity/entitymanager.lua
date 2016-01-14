@@ -11,6 +11,20 @@ function EntityManager.add(entity)
 	end
 end
 
+function EntityManager.entityAt(gridX, gridY)
+	local result = nil
+	if EntityManager.player.gridX == gridX and EntityManager.player.gridY == gridY then
+		result = EntityManager.player
+	else
+		for key,value in pairs(EntityManager.entities) do
+			if value.gridX == gridX and value.gridY == gridY then
+				result = value
+			end
+		end
+	end
+	return result
+end
+
 function EntityManager.addPlayer(player)
 	EntityManager.player = player
 end

@@ -3,14 +3,14 @@ local Player = {};
 local TextureManager = require("graphics.texturemanager")
 local TurnManager = require("gameplay.turnmanager")
 
-function Player.create()
-  local instance = require("entity.turnbasedentity").create(0, 0, TextureManager.getTexture("sprites", 5, 0))
+function Player.create(gridX, gridY)
+  local instance = require("entity.turnbasedentity").create(gridX, gridY, TextureManager.getTexture("sprites", 5, 0))
 	instance.turn = nil
 	instance.onUpdateSuper = instance.onUpdate
 
   function instance.onUpdate(delta)
 		instance.onUpdateSuper(delta)
-		if not TurnManager.started then
+		if not TurnManager.started and not TurnManager.paused then
 			local playerTurnEnded = false
 			local moveDirection = nil
     	if love.keyboard.isDown("right") then
@@ -35,7 +35,11 @@ function Player.create()
 		end
   end
 
-  return instance;
+	function instance.onEntityBump(entity)
+		print("player: bump!")
+	end
+
+  return instance
 end
 
 return Player

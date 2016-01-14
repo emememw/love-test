@@ -1,27 +1,55 @@
 local TurnBasedEntity = {}
 
 local Config = require("config.config")
+local MapManager = require("map.mapmanager")
+local EntityManager = require("entity.entitymanager")
 
-function TurnBasedEntity.create(x, y, texture)
-	local instance = require("entity.entity").create(x, y, texture)
+function TurnBasedEntity.create(gridX, gridY, texture)
+	local instance = require("entity.entity").create(gridX*Config.gridSize, gridY*Config.gridSize, texture)
 
-	instance.gridX = math.floor(x/Config.gridSize)
-	instance.gridY = math.floor(y/Config.gridSize)
+	instance.gridX = gridX
+	instance.gridY = gridY
 	instance.speed = 400
 
 	function instance.moveGrid(direction)
+		local validMove = false
+		local newGridX = instance.gridX
+		local newGridY = instance.gridY
+
 		if direction == "right" then
-			instance.gridX = instance.gridX + 1
+			newGridX = newGridX + 1
     elseif direction == "left" then
-      instance.gridX = instance.gridX - 1
+      newGridX = newGridX - 1
     elseif direction == "down" then
-      instance.gridY = instance.gridY + 1
+      newGridY = newGridY + 1
     else
-      instance.gridY = instance.gridY - 1
+      newGridY = newGridY - 1
     end
+
+		if MapManager.currentMap.tileAt(newGridX, newGridY).accessible then
+			validMove = true
+		end
+
+		local entityAtPosition = EntityManager.entityAt(newGridX, newGridY)
+		if entityAtPosition ~= nil then
+			if validMove then
+				validMove = false
+			end
+			instance.onEntityBump(entityAtPosition)
+		end
+
+
+		if validMove then
+			instance.gridX = newGridX
+			instance.gridY = newGridY
+		end
+
 	end
 
 	function instance.onTurn(turnCount)
+	end
+
+	function instance.onEntityBump(entity)
 	end
 
 	function instance.turn(turnCount)

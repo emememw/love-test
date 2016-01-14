@@ -8,8 +8,8 @@ local TurnManager = require("gameplay.turnmanager")
 function love.load()
   love.graphics.setDefaultFilter("nearest")
   TextureManager.addSheet("sprites.png", "sprites", 16);
-	-- EntityManager.add(require("entity.entity").create(0, 0, TextureManager.getTexture("sprites", 5, 0)));
-  EntityManager.addPlayer(require("entity.player").create());
+	EntityManager.add(require("entity.bob").create(2, 2));
+  EntityManager.addPlayer(require("entity.player").create(1, 1));
 	MapManager.loadMap()
 end
 
