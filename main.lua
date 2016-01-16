@@ -10,7 +10,7 @@ function love.load()
   TextureManager.addSheet("sprites.png", "sprites", 16);
 	EntityManager.add(require("entity.bob").create(2, 2));
 	EntityManager.add(require("entity.bob").create(2, 3));
-  EntityManager.addPlayer(require("entity.player").create(1, 1));
+  EntityManager.addPlayer(require("entity.player").create(8, 8));
 	MapManager.loadMap()
 end
 

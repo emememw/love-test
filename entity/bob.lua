@@ -3,6 +3,7 @@ local Bob = {}
 local TextureManager = require("graphics.texturemanager")
 local EntityManager = require("entity.entitymanager")
 local AnimationManager = require("animation.animationmanager")
+local AiManager = require("ai.aimanager")
 
 function Bob.create(gridX, gridY)
 	local instance = require("entity.turnbasedentity").create(gridX, gridY, TextureManager.getTexture("sprites", 10, 3))
@@ -18,9 +19,15 @@ function Bob.create(gridX, gridY)
 
 	function instance.onTurn(turnCount)
 		---if instance.turnMarker + 1 == turnCount then
-			instance.moveGrid("right")
-			instance.turnMarker = turnCount
-			AnimationManager.add(require("animation.testanimation").create(instance))
+			local pathNode = AiManager.pathTo(EntityManager.player.gridX, EntityManager.player.gridY, instance)
+			if pathNode ~= nil then
+				local direction = AiManager.chooseDirection(pathNode.gridX, pathNode.gridY, instance)
+				if direction ~= nil then
+					instance.moveGrid(direction)
+					instance.turnMarker = turnCount
+					AnimationManager.add(require("animation.testanimation").create(instance))
+				end
+			end
 		---end
 	end
 
